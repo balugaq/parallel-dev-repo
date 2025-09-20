@@ -14,9 +14,9 @@ tasks.runServer {
         runFolder.resolve("eula.txt").writeText("eula=true")
 
         val pluginsDir = runFolder.resolve("plugins")
-//        if (!System.getProperty("io.github.pylonmc.pylon.disableConfigReset").toBoolean()) {
-//            pluginsDir.deleteRecursively()
-//        }
+        if (!System.getProperty("io.github.pylonmc.pylon.disableConfigReset").toBoolean()) {
+            pluginsDir.deleteRecursively()
+        }
         pluginsDir.mkdirs()
         copy {
             from(baseBuild.projectDir.resolve("build/libs")) {
