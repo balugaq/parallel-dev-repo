@@ -36,17 +36,12 @@ tasks.runServer {
     minecraftVersion("1.21.8")
 }
 
-tasks.register("runSnapshotServer") {
-    dependsOn(tasks.runServer)
-    group = "run paper"
-}
-
 tasks.register("runStableServer") {
     dependsOn(baseBuild.task(":runServer"))
     group = "run paper"
 }
 
-tasks.register("runLiveTests") {
+tasks.register("runTests") {
     dependsOn(coreBuild.task(":test:runServer"))
     group = "run paper"
 }
