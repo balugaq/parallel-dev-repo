@@ -15,7 +15,8 @@ tasks.runServer {
 
         val pluginsDir = runFolder.resolve("plugins")
         if (!System.getProperty("io.github.pylonmc.pylon.disableConfigReset").toBoolean()) {
-            pluginsDir.deleteRecursively()
+            pluginsDir.resolve("PylonCore").deleteRecursively()
+            pluginsDir.resolve("PylonBase").deleteRecursively()
         }
         pluginsDir.mkdirs()
         copy {
