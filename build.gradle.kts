@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
@@ -34,7 +36,19 @@ tasks.runServer {
     }
 
     maxHeapSize = "4G"
-    minecraftVersion("1.21.10")
+
+    fun readMinecraftVersion(build: IncludedBuild): String {
+        val props = Properties()
+        build.projectDir.resolve("gradle.properties").bufferedReader().use(props::load)
+        return props["minecraft.version"] as String
+    }
+
+    val coreVersion = readMinecraftVersion(coreBuild)
+    val baseVersion = readMinecraftVersion(baseBuild)
+    if (coreVersion != baseVersion) {
+        throw GradleException("Minecraft version mismatch between pylon-core ($coreVersion) and pylon-base ($baseVersion)")
+    }
+    minecraftVersion(coreVersion)
 }
 
 tasks.register("runStableServer") {
