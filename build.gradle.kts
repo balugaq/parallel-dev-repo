@@ -34,7 +34,7 @@ tasks.runServer {
     }
 
     maxHeapSize = "4G"
-    minecraftVersion("1.21.10")
+    minecraftVersion("1.21.11")
 }
 
 tasks.register("runStableServer") {
