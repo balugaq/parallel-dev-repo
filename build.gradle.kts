@@ -4,11 +4,11 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-val baseBuild = gradle.includedBuild("pylon-base")
-val coreBuild = gradle.includedBuild("rebar")
+val pylonBuild = gradle.includedBuild("pylon")
+val rebarBuild = gradle.includedBuild("rebar")
 
 tasks.runServer {
-    dependsOn(baseBuild.task(":shadowJar"), coreBuild.task(":rebar:shadowJar"))
+    dependsOn(pylonBuild.task(":shadowJar"), rebarBuild.task(":rebar:shadowJar"))
 
     doFirst {
         val runFolder = project.projectDir.resolve("run")
@@ -17,18 +17,18 @@ tasks.runServer {
 
         val pluginsDir = runFolder.resolve("plugins")
         if (!System.getProperty("io.github.pylonmc.rebar.disableConfigReset").toBoolean()) {
-            pluginsDir.resolve("RebarCore").deleteRecursively()
-            pluginsDir.resolve("PylonBase").deleteRecursively()
+            pluginsDir.resolve("Rebar").deleteRecursively()
+            pluginsDir.resolve("Pylon").deleteRecursively()
         }
         pluginsDir.mkdirs()
         copy {
-            from(baseBuild.projectDir.resolve("build/libs")) {
-                include("pylon-base-1.0.0-SNAPSHOT.jar")
+            from(pylonBuild.projectDir.resolve("build/libs")) {
+                include("pylon-1.0.0-SNAPSHOT.jar")
             }
             into(pluginsDir)
         }
         copy {
-            from(coreBuild.projectDir.resolve("rebar/build/libs")) {
+            from(rebarBuild.projectDir.resolve("rebar/build/libs")) {
                 include("rebar-1.0.0-SNAPSHOT.jar")
             }
             into(pluginsDir)
@@ -43,20 +43,20 @@ tasks.runServer {
         return props["minecraft.version"] as String
     }
 
-    val rebarVersion = readMinecraftVersion(coreBuild)
-    val baseVersion = readMinecraftVersion(baseBuild)
-    if (rebarVersion != baseVersion) {
-        throw GradleException("Minecraft version mismatch between Rebar ($rebarVersion) and pylon-base ($baseVersion)")
+    val rebarVersion = readMinecraftVersion(rebarBuild)
+    val pylonVersion = readMinecraftVersion(pylonBuild)
+    if (rebarVersion != pylonVersion) {
+        throw GradleException("Minecraft version mismatch between Rebar ($rebarVersion) and Pylon ($pylonVersion)")
     }
     minecraftVersion(rebarVersion)
 }
 
 tasks.register("runStableServer") {
-    dependsOn(baseBuild.task(":runServer"))
+    dependsOn(pylonBuild.task(":runServer"))
     group = "run paper"
 }
 
 tasks.register("runTests") {
-    dependsOn(coreBuild.task(":test:runServer"))
+    dependsOn(rebarBuild.task(":test:runServer"))
     group = "run paper"
 }

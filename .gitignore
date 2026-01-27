@@ -1,6 +1,6 @@
 .gradle
 build
 .idea
-pylon-base
+pylon
 rebar
 run

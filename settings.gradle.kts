@@ -3,7 +3,7 @@ run {
 }
 
 run {
-    Runtime.getRuntime().exec(arrayOf("git", "clone", "https://github.com/pylonmc/pylon-base")).waitFor()
+    Runtime.getRuntime().exec(arrayOf("git", "clone", "https://github.com/pylonmc/pylon")).waitFor()
 }
 
 plugins {
@@ -12,4 +12,4 @@ plugins {
 
 rootProject.name = "pylon"
 includeBuild("rebar")
-includeBuild("pylon-base")
+includeBuild("pylon")
