@@ -1,6 +1,6 @@
 # Parallel Dev Repo
 
-This project allows Rebar and Rebar to be developed in parallel. To set up the subprojects, simply run `./gradlew`.
+This project allows Rebar and Pylon to be developed in parallel. To set up the subprojects, simply run `./gradlew`.
 Rebar and Pylon are each their own Git repository. Therefore, any changes made to them must be committed and pushed separately.
 
 ## Tasks
