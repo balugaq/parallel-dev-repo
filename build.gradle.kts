@@ -5,10 +5,10 @@ plugins {
 }
 
 val baseBuild = gradle.includedBuild("pylon-base")
-val coreBuild = gradle.includedBuild("pylon-core")
+val coreBuild = gradle.includedBuild("rebar")
 
 tasks.runServer {
-    dependsOn(baseBuild.task(":shadowJar"), coreBuild.task(":pylon-core:shadowJar"))
+    dependsOn(baseBuild.task(":shadowJar"), coreBuild.task(":rebar:shadowJar"))
 
     doFirst {
         val runFolder = project.projectDir.resolve("run")
@@ -16,8 +16,8 @@ tasks.runServer {
         runFolder.resolve("eula.txt").writeText("eula=true")
 
         val pluginsDir = runFolder.resolve("plugins")
-        if (!System.getProperty("io.github.pylonmc.pylon.disableConfigReset").toBoolean()) {
-            pluginsDir.resolve("PylonCore").deleteRecursively()
+        if (!System.getProperty("io.github.pylonmc.rebar.disableConfigReset").toBoolean()) {
+            pluginsDir.resolve("RebarCore").deleteRecursively()
             pluginsDir.resolve("PylonBase").deleteRecursively()
         }
         pluginsDir.mkdirs()
@@ -28,8 +28,8 @@ tasks.runServer {
             into(pluginsDir)
         }
         copy {
-            from(coreBuild.projectDir.resolve("pylon-core/build/libs")) {
-                include("pylon-core-1.0.0-SNAPSHOT.jar")
+            from(coreBuild.projectDir.resolve("rebar/build/libs")) {
+                include("rebar-1.0.0-SNAPSHOT.jar")
             }
             into(pluginsDir)
         }
@@ -43,12 +43,12 @@ tasks.runServer {
         return props["minecraft.version"] as String
     }
 
-    val coreVersion = readMinecraftVersion(coreBuild)
+    val rebarVersion = readMinecraftVersion(coreBuild)
     val baseVersion = readMinecraftVersion(baseBuild)
-    if (coreVersion != baseVersion) {
-        throw GradleException("Minecraft version mismatch between pylon-core ($coreVersion) and pylon-base ($baseVersion)")
+    if (rebarVersion != baseVersion) {
+        throw GradleException("Minecraft version mismatch between Rebar ($rebarVersion) and pylon-base ($baseVersion)")
     }
-    minecraftVersion(coreVersion)
+    minecraftVersion(rebarVersion)
 }
 
 tasks.register("runStableServer") {

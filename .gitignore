@@ -2,5 +2,5 @@
 build
 .idea
 pylon-base
-pylon-core
+rebar
 run
